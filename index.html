@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spotfree</title>
+<style>
+  body{margin:0;background:#000;color:#fff;font-family:system-ui,sans-serif;display:flex;min-height:100vh;align-items:center;justify-content:center}
+  .card{width:min(92vw,380px);text-align:center;padding:24px;border-radius:16px;background:linear-gradient(#3a1b6b,#000)}
+  img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;background:#1f1a28}
+  h1{font-size:20px;margin:16px 0 4px}
+  p{color:#b3b3b3;margin:0 0 20px}
+  a.btn{display:block;padding:14px;border-radius:999px;text-decoration:none;font-weight:600;margin:10px 0}
+  .primary{background:#9b5cff;color:#000}
+  .secondary{border:1px solid #666;color:#fff}
+</style>
+</head>
+<body>
+<div class="card">
+  <img id="cover" alt="">
+  <h1 id="title">Música compartilhada</h1>
+  <p>Ouça no Spotfree</p>
+  <a id="open" class="btn primary" href="#">Abrir no Spotfree</a>
+  <a id="yt" class="btn secondary" href="#">Ouvir no YouTube Music</a>
+</div>
+<script>
+  var params = new URLSearchParams(location.search);
+  var id = (params.get('v') || '').replace(/[^A-Za-z0-9_-]/g, '');
+  var title = params.get('t') || 'Música compartilhada';
+  document.getElementById('title').textContent = title;
+  document.title = title + ' • Spotfree';
+  if (id) {
+    document.getElementById('cover').src = 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
+    var yt = 'https://music.youtube.com/watch?v=' + id;
+    document.getElementById('yt').href = yt;
+    var open = document.getElementById('open');
+    if (/Android/i.test(navigator.userAgent)) {
+      open.href = 'intent://play?v=' + id +
+        '#Intent;scheme=spotfree;package=com.pessoal.roxo;S.browser_fallback_url=' +
+        encodeURIComponent(yt) + ';end';
+    } else {
+      open.style.display = 'none';
+    }
+  } else {
+    document.getElementById('open').style.display = 'none';
+    document.getElementById('yt').style.display = 'none';
+  }
+</script>
+</body>
+</html>
